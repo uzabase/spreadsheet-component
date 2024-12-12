@@ -30,10 +30,12 @@ class SpreadSheet extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log("Render");
     this.render();
   }
 
   disconnectedCallback() {
+    console.log("Unmount");
     this.root.unmount();
   }
 
