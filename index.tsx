@@ -1,5 +1,5 @@
 import { createRoot, Root } from "react-dom/client";
-import { Spreadsheet } from "react-spreadsheet";
+import { CellBase, Spreadsheet } from "react-spreadsheet";
 import style from "./index.css?inline";
 
 // SSRでは無視してほしい
@@ -23,28 +23,49 @@ if ("customElements" in globalThis) {
       this.render();
     }
 
-    get data(): Record<string, any>[] {
+    get data(): CellBase[][] {
       return JSON.parse(this.getAttribute("data") ?? "[]");
     }
 
-    get columns(): string[] {
-      return JSON.parse(this.getAttribute("columns") ?? "[]");
+    get columnsLabels(): string[] {
+      const attr = this.getAttribute("columns");
+      return attr ? JSON.parse(attr) : undefined;
+    }
+
+    get rowLabels(): string[] {
+      const attr = this.getAttribute("rowLabels");
+      return attr ? JSON.parse(attr) : undefined;
     }
 
     connectedCallback() {
-      console.log("Render");
       this.render();
     }
 
     disconnectedCallback() {
-      console.log("Unmount");
       this.root.unmount();
     }
 
+    handleEvent(type: string) {
+      return (e?: any) => {
+        this.dispatchEvent(new CustomEvent(type, { detail: e }));
+      };
+    }
+
     render() {
-      const data = this.data.map(row => this.columns.map(col => ({ value: row[col] })));
       this.root.render(
-        <Spreadsheet data={data} columnLabels={this.columns} />
+        <Spreadsheet
+          data={this.data}
+          columnLabels={this.columnsLabels}
+          rowLabels={this.rowLabels}
+          onActivate={this.handleEvent("activate")}
+          onChange={this.handleEvent("change")}
+          onModeChange={this.handleEvent("modechange")}
+          onBlur={this.handleEvent("blur")}
+          onCellCommit={this.handleEvent("cellcommit")}
+          onEvaluatedDataChange={this.handleEvent("evaluateddatachange")}
+          onKeyDown={this.handleEvent("keydown")}
+          onSelect={this.handleEvent("select")}
+        />
       );
     }
   }
