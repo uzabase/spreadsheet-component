@@ -4,9 +4,11 @@ export default defineConfig({
   build: {
     lib: {
       entry: "./index.tsx",
-      fileName: "index.js",
       formats: ["iife"],
-      name: "spreadsheet.js",
+      fileName(_, __) {
+        return "spreadsheet.js";
+      },
+      name: "spreadsheet",
     }
   }
 });
