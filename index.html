@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="module" src="./index.tsx"></script>
+  <spread-sheet></spread-sheet>
+  <script>
+    const spreadSheet = document.querySelector('spread-sheet');
+    spreadSheet.setAttribute("data", JSON.stringify([
+      { foo: "bar", hoge: "fuga" },
+      { foo: "hoge", hoge: "fuga" },
+      { foo: "fuga", hoge: "hoge" },
+    ]));
+    spreadSheet.setAttribute("columns", JSON.stringify(["foo", "hoge"]));
+  </script>
+</body>
+</html>
