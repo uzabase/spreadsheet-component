@@ -5,7 +5,7 @@ export default defineConfig({
     lib: {
       entry: "./index.tsx",
       formats: ["umd"],
-      fileName(_, __) {
+      fileName() {
         return "spreadsheet.js";
       },
       name: "spreadsheet",
